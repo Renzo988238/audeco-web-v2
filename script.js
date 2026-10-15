@@ -42,7 +42,7 @@ contactForm?.addEventListener('submit',e=>{
   const mensaje=(f.get('mensaje')||'').trim();
   const exterior=f.get('ubicacion')==='Extranjero';
   const pais=(f.get('pais')||'').trim();
-  const asunto=`Caso de consumidor — ${nombre||'AUDECO'}`;
+  const asunto=`Caso de consumidor${exterior?' (desde el extranjero)':''} — ${nombre||'AUDECO'}`;
   const cuerpo=[
     `Nombre: ${nombre}`,
     `Correo: ${correo}`,
