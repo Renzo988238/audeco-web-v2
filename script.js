@@ -40,12 +40,15 @@ contactForm?.addEventListener('submit',e=>{
   const telefono=(f.get('telefono')||'').trim();
   const empresa=(f.get('empresa')||'').trim();
   const mensaje=(f.get('mensaje')||'').trim();
+  const exterior=f.get('ubicacion')==='Extranjero';
+  const pais=(f.get('pais')||'').trim();
   const asunto=`Caso de consumidor — ${nombre||'AUDECO'}`;
   const cuerpo=[
     `Nombre: ${nombre}`,
     `Correo: ${correo}`,
     telefono?`Teléfono: ${telefono}`:null,
     empresa?`Empresa o proveedor: ${empresa}`:null,
+    exterior?`Ubicación: En el extranjero${pais?` (${pais})`:''} — compra realizada en el Perú`:null,
     '',
     'Qué pasó:',
     mensaje
@@ -59,6 +62,10 @@ contactForm?.addEventListener('submit',e=>{
     fallback.scrollIntoView({behavior:'smooth',block:'center'});
   }
 });
+// Mostrar el campo de país solo si la persona está en el extranjero
+const locSelect=$('select[name="ubicacion"]'), countryField=$('#country-field');
+locSelect?.addEventListener('change',()=>{if(countryField)countryField.hidden=locSelect.value!=='Extranjero'});
+if(location.hash==='#desde-el-extranjero'&&locSelect){locSelect.value='Extranjero';if(countryField)countryField.hidden=false}
 fallbackCopy?.addEventListener('click',async()=>{
   try{
     await navigator.clipboard.writeText(fallbackText.value);
