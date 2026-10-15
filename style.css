@@ -328,6 +328,26 @@ body.modal-open{overflow:hidden}
 .delay-3{transition-delay:.24s}
 
 /* ---------- Responsive ---------- */
+/* ---------- Apoyo desde el extranjero ---------- */
+.abroad-band{background:linear-gradient(135deg,#14213a 0%,#203457 62%,#765043 100%);color:#fff;padding:72px 0}
+.abroad-inner{display:grid;grid-template-columns:1.25fr .75fr;gap:60px;align-items:center}
+.abroad-band .kicker{color:#e0b27e}
+.abroad-band h2{font-size:clamp(28px,3.4vw,40px);line-height:1.15;letter-spacing:-.035em;margin:12px 0 22px;color:#fff}
+.abroad-band p{margin:0 0 26px;color:#e6ded4;font-size:18px;line-height:1.75;max-width:640px}
+.abroad-actions{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.abroad-mail{color:#e7d9c8;font-size:15px;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.abroad-mail:hover{color:#fff}
+.phone-note{display:block;margin-top:8px;color:#c4b8ab;font-size:13px;line-height:1.5}
+.abroad-points{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.abroad-points li{display:flex;align-items:center;gap:16px;padding:16px 20px;border:1px solid rgba(255,255,255,.16);border-radius:18px;background:rgba(255,255,255,.06);font-size:17px;line-height:1.4}
+.abroad-points b{flex-shrink:0;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#e0b27e;color:var(--navy);font:800 15px Manrope}
+.abroad-note{margin:18px 0 0;padding:16px 20px;border-left:3px solid var(--cyan);background:var(--soft);border-radius:0 14px 14px 0;font-size:16px;line-height:1.7;color:#3d3128;max-width:560px}
+.contact-form select{font:inherit;font-size:16px;padding:13px 15px;border:1px solid var(--line);border-radius:13px;background:#fbfaf8;color:var(--ink)}
+.contact-form select:focus{outline:2px solid var(--cyan);outline-offset:1px;background:#fff}
+.contact-form label[hidden]{display:none}
+@media(max-width:900px){.abroad-inner{grid-template-columns:1fr;gap:34px}}
+@media(max-width:720px){.abroad-band{padding:52px 0}.abroad-band p{font-size:16px}}
+
 @media(max-width:900px){
   .main-nav{gap:14px}
   .hero-grid{gap:30px}

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="__DESC__">
+  <meta name="description" content="Contacta a AUDECO. Te acompañamos gratis si tus derechos como consumidor fueron vulnerados, ya sea que estés en el Perú o en el extranjero.">
   <meta name="theme-color" content="#1b2942">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" href="favicon-512.png" type="image/png" sizes="512x512">
@@ -71,6 +71,7 @@
           <span class="kicker">CONTACTO</span>
           <h2>Estamos para<br><span>escucharte.</span></h2>
           <p>¿Sientes que tus derechos como consumidor han sido vulnerados? Cuéntanos qué pasó: te acompañamos en tu caso, de forma gratuita.</p>
+          <p class="abroad-note" id="desde-el-extranjero"><strong>¿Vives fuera del Perú?</strong> Las personas consumidoras también están en el extranjero. Si algo salió mal con una compra hecha en el Perú, cuéntanos qué pasó e indícalo en el formulario.</p>
 
           <form class="contact-form" id="contact-form">
             <div class="form-row">
@@ -81,6 +82,13 @@
               <label>Teléfono (opcional)<input type="tel" name="telefono"></label>
               <label>Empresa o proveedor involucrado<input type="text" name="empresa"></label>
             </div>
+            <label>¿Desde dónde nos escribes?
+              <select name="ubicacion">
+                <option value="Perú">Estoy en el Perú</option>
+                <option value="Extranjero">Estoy en el extranjero (compré en el Perú)</option>
+              </select>
+            </label>
+            <label class="country-field" id="country-field" hidden>País donde te encuentras<input type="text" name="pais" placeholder="Ej.: España, Estados Unidos, Chile…"></label>
             <label>Cuéntanos qué pasó<textarea name="mensaje" rows="5" required placeholder="Describe brevemente tu situación de consumo…"></textarea></label>
             <button type="submit" class="btn">Enviar mi caso <b>→</b></button>
             <p class="form-hint">Al enviar se abrirá tu correo con el mensaje listo para mandarlo a AUDECO — no compartimos tus datos con nadie más.</p>
@@ -103,6 +111,7 @@
           <div class="contact-line"></div>
           <p>Calle Internacional Nro. 140<br>Urb. Manuel Prado · Paucarpata · Arequipa</p>
           <a href="tel:+51930755123" class="phone">+51 930 755 123</a>
+          <small class="phone-note">Desde el extranjero, marca el código de Perú (+51).</small>
         </div>
       </div>
     </section>
