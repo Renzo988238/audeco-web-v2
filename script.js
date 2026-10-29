@@ -120,7 +120,7 @@ async function renderFeed(box){
       ${n.imagen?`<img class="fb-thumb" src="${esc(n.imagen)}" alt="" loading="lazy">`:`<span class="fb-thumb fb-icon" aria-hidden="true">${TIPO_ICONO[n.tipo]||TIPO_ICONO.Publicación}</span>`}
       <span class="fb-text">
         <small>${esc(n.tipo||'Publicación')} · ${fechaCorta(n.fecha)}</small>
-        <strong>${esc(n.titulo)}</strong>
+        ${n.titulo?`<strong>${esc(n.titulo)}</strong>`:''}
         <span>${esc(n.texto)}</span>
         <em>Ver en Facebook →</em>
       </span>
