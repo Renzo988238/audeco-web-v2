@@ -34,26 +34,55 @@ def titulo_y_texto(mensaje):
     return "", texto
 
 
+def api(ruta, token, **params):
+    params["access_token"] = token
+    return json.loads(obtener(f"{API}/{ruta}?" + urllib.parse.urlencode(params)))
+
+
+def token_de_pagina(token):
+    """Acepta un token de página o de usuario; con uno de usuario busca el de la página."""
+    yo = api("me", token, fields="id,name", metadata=1)
+    tipo = yo.get("metadata", {}).get("type", "")
+    print(f"Token de tipo «{tipo}» a nombre de «{yo.get('name')}»")
+    if tipo == "page":
+        return token, yo["id"]
+    paginas = api("me/accounts", token, fields="id,name,access_token").get("data", [])
+    print("Páginas que administra:", ", ".join(p["name"] for p in paginas) or "ninguna")
+    elegida = next((p for p in paginas if "audeco" in p["name"].lower()), paginas[0] if paginas else None)
+    if not elegida:
+        raise SystemExit("El token no tiene acceso a ninguna página.")
+    print(f"Usando la página «{elegida['name']}»")
+    return elegida["access_token"], elegida["id"]
+
+
 def main():
     token = os.environ.get("FB_PAGE_TOKEN", "").strip()
     if not token:
         print("Falta el secreto FB_PAGE_TOKEN: no se sincroniza.")
         return 0
 
-    campos = "message,created_time,permalink_url,full_picture"
-    url = f"{API}/me/posts?" + urllib.parse.urlencode(
-        {"fields": campos, "limit": LIMITE * 2, "access_token": token}
-    )
     try:
-        datos = json.loads(obtener(url))
+        token, pagina = token_de_pagina(token)
+        campos = "message,created_time,permalink_url,full_picture"
+        posts = []
+        # published_posts trae solo lo que publica la página; posts es el respaldo
+        for ruta in ("published_posts", "posts"):
+            posts = api(f"{pagina}/{ruta}", token, fields=campos, limit=LIMITE * 2).get("data", [])
+            print(f"{ruta}: {len(posts)} publicaciones")
+            if posts:
+                break
     except urllib.error.HTTPError as e:
         # El cuerpo del error de Meta no incluye el token
         print("Error de la API de Meta:", e.code, e.read().decode("utf-8", "replace"))
         return 1
 
+    if not posts:
+        print("La API no devolvió publicaciones: se mantiene novedades.json sin cambios.")
+        return 1
+
     CARPETA_IMG.mkdir(exist_ok=True)
     novedades, usadas = [], set()
-    for post in datos.get("data", []):
+    for post in posts:
         mensaje = post.get("message", "")
         if not mensaje and not post.get("full_picture"):
             continue

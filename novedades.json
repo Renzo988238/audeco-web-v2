@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "fecha": "2026-10-16",
+    "tipo": "Evento",
+    "titulo": "¡Gracias por participar en nuestro webinar!",
+    "texto": "Gracias a todas las personas que participaron en nuestro webinar sobre los Derechos del Consumidor. En los próximos días publicaremos la fecha de nuestro próximo evento.",
+    "enlace": "https://www.facebook.com/AudecoPe",
+    "imagen": ""
+  },
+  {
+    "fecha": "2026-10-13",
+    "tipo": "Evento",
+    "titulo": "Webinar AUDECO · 14 de octubre de 2026",
+    "texto": "Te invitamos a nuestro próximo espacio de capacitación virtual sobre los derechos de las personas consumidoras. Inscripción gratuita mediante formulario.",
+    "enlace": "https://www.facebook.com/AudecoPe",
+    "imagen": ""
+  }
+]
