@@ -25,6 +25,7 @@ jobs:
           FB_PAGE_TOKEN: ${{ secrets.FB_PAGE_TOKEN }}
         run: python .github/scripts/sync_facebook.py
       - name: Guardar cambios
+        if: ${{ !cancelled() }}   # también cuando el paso anterior avisa que el acceso está por vencer
         run: |
           git add novedades.json novedades
           if git diff --cached --quiet; then
