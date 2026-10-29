@@ -40,29 +40,17 @@ def api(ruta, token, **params):
     return json.loads(obtener(f"{API}/{ruta}?" + urllib.parse.urlencode(params)))
 
 
-def token_de_pagina(token):
-    """Acepta un token de página o de usuario; con uno de usuario busca el de la página."""
-    yo = api("me", token, fields="id,name", metadata=1)
-    tipo = yo.get("metadata", {}).get("type", "")
-    print(f"Token de tipo «{tipo}» a nombre de «{yo.get('name')}»")
-    if tipo == "page":
-        return token, yo["id"]
-    paginas = api("me/accounts", token, fields="id,name,access_token").get("data", [])
-    print("Páginas que administra:", ", ".join(p["name"] for p in paginas) or "ninguna")
-    elegida = next((p for p in paginas if "audeco" in p["name"].lower()), paginas[0] if paginas else None)
-    if not elegida:
-        raise SystemExit("El token no tiene acceso a ninguna página.")
-    print(f"Usando la página «{elegida['name']}»")
-    return elegida["access_token"], elegida["id"]
-
-
-def dias_de_acceso(token):
-    """Días que quedan antes de que Meta pida renovar el permiso de datos (cada 90 días)."""
+def info_token(token):
+    """Datos del token según el depurador de Meta (tipo y vencimientos)."""
     try:
-        info = api("debug_token", token, input_token=token).get("data", {})
+        return api("debug_token", token, input_token=token).get("data", {})
     except Exception as e:
-        print("No se pudo revisar la vigencia del token:", e)
-        return None
+        print("No se pudo revisar el token en el depurador de Meta:", e)
+        return {}
+
+
+def dias_de_acceso(info):
+    """Días que quedan antes de que Meta pida renovar el permiso de datos (cada 90 días)."""
     vence = info.get("data_access_expires_at") or 0
     if not vence:
         return None
@@ -72,15 +60,39 @@ def dias_de_acceso(token):
     return dias
 
 
+def token_de_pagina(token, info):
+    """Acepta un token de página o de usuario; con uno de usuario busca el de la página."""
+    yo = api("me", token, fields="id,name")
+    tipo = (info.get("type") or "").upper()
+    print(f"Token de tipo «{tipo or 'desconocido'}» a nombre de «{yo.get('name')}»")
+    if tipo == "PAGE":
+        return token, yo["id"]
+    try:
+        paginas = api("me/accounts", token, fields="id,name,access_token").get("data", [])
+    except urllib.error.HTTPError as e:
+        # Un token de página no tiene «accounts»: si el depurador no dio el tipo, se usa tal cual
+        if e.code == 400:
+            print("El token no tiene «accounts»: se usa como token de página.")
+            return token, yo["id"]
+        raise
+    print("Páginas que administra:", ", ".join(p["name"] for p in paginas) or "ninguna")
+    elegida = next((p for p in paginas if "audeco" in p["name"].lower()), paginas[0] if paginas else None)
+    if not elegida:
+        raise SystemExit("El token no tiene acceso a ninguna página.")
+    print(f"Usando la página «{elegida['name']}»")
+    return elegida["access_token"], elegida["id"]
+
+
 def main():
     token = os.environ.get("FB_PAGE_TOKEN", "").strip()
     if not token:
         print("Falta el secreto FB_PAGE_TOKEN: no se sincroniza.")
         return 0
 
-    dias = dias_de_acceso(token)
+    info = info_token(token)
+    dias = dias_de_acceso(info)
     try:
-        token, pagina = token_de_pagina(token)
+        token, pagina = token_de_pagina(token, info)
         campos = "message,created_time,permalink_url,full_picture"
         posts = []
         # published_posts trae solo lo que publica la página; posts es el respaldo
