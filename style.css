@@ -490,14 +490,22 @@ body.modal-open{overflow:hidden}
 .fb-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;min-height:200px}
 .fb-card{display:flex;flex-direction:column;background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line);transition:transform .25s,box-shadow .25s}
 .fb-card:hover{transform:translateY(-4px);box-shadow:0 26px 60px rgba(25,32,45,.16)}
-.fb-card-img{display:block;aspect-ratio:16/10;background:linear-gradient(135deg,var(--navy),#765043);overflow:hidden}
-.fb-card-img img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;transition:transform .4s}
-.fb-card:hover .fb-card-img img{transform:scale(1.04)}
-.fb-card-img .fb-card-logo{width:38%;height:auto;margin:auto;position:relative;top:50%;transform:translateY(-50%);background:#fff;border-radius:50%;padding:14px;object-fit:contain}
-.fb-card:hover .fb-card-img .fb-card-logo{transform:translateY(-50%)}
+.fb-card-img{display:block;position:relative;aspect-ratio:16/10;background:linear-gradient(135deg,var(--navy),#765043);overflow:hidden}
+/* La foto se muestra entera (las infografías no se recortan) sobre un fondo difuminado de sí misma */
+.fb-card-blur{position:absolute;inset:-20px;width:calc(100% + 40px);height:calc(100% + 40px);object-fit:cover;filter:blur(18px) brightness(.9);transform:scale(1.1)}
+/* Infografía sin texto: la imagen crece y ocupa todo el alto de la tarjeta */
+.fb-card.is-info .fb-card-img{aspect-ratio:auto;flex:1;min-height:260px}
+.fb-card.is-info .fb-card-body{flex:0}
+.fb-card-photo{position:relative;width:100%;height:100%;object-fit:contain;display:block;transition:transform .4s}
+.fb-card:hover .fb-card-photo{transform:scale(1.03)}
+.fb-card-img .fb-card-logo{display:block;width:38%;height:auto;margin:auto;position:relative;top:50%;transform:translateY(-50%);background:#fff;border-radius:50%;padding:14px;object-fit:contain}
 .fb-card-body{display:flex;flex-direction:column;gap:10px;padding:24px 26px 26px;flex:1}
-.fb-card-body small{color:var(--cyan);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
-.fb-card-text{color:var(--ink);font-size:17px;line-height:1.6;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;flex:1}
+.fb-card-body small{color:var(--muted);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.fb-card-body small b{color:var(--blue);font-weight:900}
+.fb-card-title{color:var(--navy);font-size:19px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.fb-card-text{color:var(--muted);font-size:16px;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.fb-card-text.solo{color:var(--ink);font-size:17px;-webkit-line-clamp:5}
+.fb-card-body em{margin-top:auto;padding-top:6px}
 .fb-card-body em{font-style:normal;color:var(--blue);font-weight:800;font-size:15px}
 .fb-item{display:flex;gap:16px;padding:20px;border-bottom:1px solid var(--line);transition:background .2s}
 .fb-item:last-child{border-bottom:0}
