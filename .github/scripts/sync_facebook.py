@@ -13,7 +13,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-API = "https://graph.facebook.com/v21.0"
+API = "https://graph.facebook.com/v25.0"
 LIMITE = 6
 RAIZ = pathlib.Path(__file__).resolve().parents[2]
 CARPETA_IMG = RAIZ / "novedades"
