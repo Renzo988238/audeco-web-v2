@@ -94,15 +94,40 @@ fbw.innerHTML=`
   </button>`;
 document.body.appendChild(fbw);
 const fbwBtn=fbw.querySelector('.fbw-btn'), fbwBody=fbw.querySelector('.fbw-body');
-// Plugin oficial de la fanpage, al ancho del contenedor (Facebook admite de 180 a 500 px)
-function fbPlugin(box,height){
-  const cs=getComputedStyle(box);
-  const w=Math.max(180,Math.min(500,Math.floor(box.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight))));
-  box.innerHTML=`<iframe title="Publicaciones de AUDECO en Facebook" src="https://www.facebook.com/plugins/page.php?href=${encodeURIComponent(FB_PAGE)}&tabs=timeline&width=${w}&height=${height}&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=false&locale=es_LA" width="${w}" height="${height}" style="border:none;overflow:hidden;display:block;margin:auto" scrolling="no" allow="encrypted-media" loading="lazy"></iframe>`;
+// Las publicaciones se leen de novedades.json: para agregar una, se edita ese archivo
+const ICONO=(d)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+const TIPO_ICONO={
+  Evento:ICONO('<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>'),
+  Alerta:ICONO('<path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17h.01"/>'),
+  Comunicado:ICONO('<path d="M3 11v2a1 1 0 0 0 1 1h3l6 4V6L7 10H4a1 1 0 0 0-1 1z"/><path d="M17 9a4 4 0 0 1 0 6"/>'),
+  Actividad:ICONO('<circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0M16 4a3 3 0 0 1 0 6M21 20a6 6 0 0 0-4-5.6"/>'),
+  Publicación:ICONO('<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>')
+};
+let novedades=null;
+function fechaCorta(iso){
+  const d=new Date(iso+'T12:00:00');
+  return isNaN(d)?'':d.toLocaleDateString('es-PE',{day:'numeric',month:'long',year:'numeric'});
+}
+function esc(t){const d=document.createElement('div');d.textContent=t??'';return d.innerHTML}
+async function renderFeed(box){
+  try{
+    novedades??=await fetch('/novedades.json',{cache:'no-cache'}).then(r=>r.json());
+  }catch{novedades=[]}
+  const items=novedades.slice().sort((x,y)=>y.fecha.localeCompare(x.fecha)).slice(0,+box.dataset.limit||4);
+  if(!items.length){box.innerHTML=`<p class="fb-empty">Mira nuestras últimas publicaciones en <a href="${FB_PAGE}" target="_blank" rel="noopener noreferrer">Facebook</a>.</p>`;return}
+  box.innerHTML=items.map(n=>`
+    <a class="fb-item" href="${esc(n.enlace||FB_PAGE)}" target="_blank" rel="noopener noreferrer">
+      ${n.imagen?`<img class="fb-thumb" src="${esc(n.imagen)}" alt="" loading="lazy">`:`<span class="fb-thumb fb-icon" aria-hidden="true">${TIPO_ICONO[n.tipo]||TIPO_ICONO.Publicación}</span>`}
+      <span class="fb-text">
+        <small>${esc(n.tipo||'Publicación')} · ${fechaCorta(n.fecha)}</small>
+        <strong>${esc(n.titulo)}</strong>
+        <span>${esc(n.texto)}</span>
+        <em>Ver en Facebook →</em>
+      </span>
+    </a>`).join('');
 }
 function fbwLoad(){
-  // El plugin se carga recién al abrir la ventana, para no hacer lenta la página
-  if(!fbwBody.firstChild)fbPlugin(fbwBody,430);
+  if(!fbwBody.firstChild){fbwBody.dataset.limit=4;renderFeed(fbwBody)}
 }
 function fbwSet(open){
   fbw.classList.toggle('open',open);
@@ -112,7 +137,7 @@ function fbwSet(open){
 fbwBtn.addEventListener('click',()=>fbwSet(!fbw.classList.contains('open')));
 fbw.querySelector('.fbw-min').addEventListener('click',()=>fbwSet(false));
 // Sección «Últimas publicaciones» del inicio
-$$('.fb-embed').forEach(box=>fbPlugin(box,+box.dataset.fbHeight||600));
+$$('.fb-feed').forEach(renderFeed);
 
 // Current year
 $('#year').textContent=new Date().getFullYear();
