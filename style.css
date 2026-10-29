@@ -482,19 +482,23 @@ body.modal-open{overflow:hidden}
 
 /* ---------- Últimas publicaciones (inicio) ---------- */
 .fb-section{padding:100px 0;background:var(--soft);border-bottom:1px solid var(--line)}
-.fb-grid{display:grid;grid-template-columns:1fr 440px;gap:70px;align-items:center}
-.fb-copy h2{font-size:clamp(38px,4.7vw,58px);line-height:1.06;letter-spacing:-.045em;color:var(--navy);margin:13px 0 20px}
-.fb-copy h2 span{color:var(--blue)}
-.fb-copy p{max-width:520px;margin:0 0 30px;color:var(--muted);font-size:19px;line-height:1.8}
-.fb-copy .btn{background:var(--navy);color:#fff;box-shadow:0 15px 32px rgba(27,41,66,.2)}
-.fb-side{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;border:1px solid var(--line)}
-.fb-side-head{display:flex;align-items:center;gap:12px;padding:18px 20px;border-bottom:1px solid var(--line)}
-.fb-side-head img{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);padding:4px;background:#fff}
-.fb-side-head div{flex:1;line-height:1.25}
-.fb-side-head strong{display:block;color:var(--navy);font-size:17px}
-.fb-side-head span{color:var(--muted);font-size:14px}
-.fb-side-head a{background:var(--navy);color:#fff;font-weight:800;font-size:14px;padding:8px 16px;border-radius:999px}
-.fb-feed{min-height:200px}
+.fb-head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;margin-bottom:46px}
+.fb-head h2{font-size:clamp(38px,4.7vw,58px);line-height:1.06;letter-spacing:-.045em;color:var(--navy);margin:13px 0 14px}
+.fb-head h2 span{color:var(--blue)}
+.fb-head p{margin:0;color:var(--muted);font-size:19px}
+.fb-head .btn{background:var(--navy);color:#fff;box-shadow:0 15px 32px rgba(27,41,66,.2)}
+.fb-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;min-height:200px}
+.fb-card{display:flex;flex-direction:column;background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line);transition:transform .25s,box-shadow .25s}
+.fb-card:hover{transform:translateY(-4px);box-shadow:0 26px 60px rgba(25,32,45,.16)}
+.fb-card-img{display:block;aspect-ratio:16/10;background:linear-gradient(135deg,var(--navy),#765043);overflow:hidden}
+.fb-card-img img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;transition:transform .4s}
+.fb-card:hover .fb-card-img img{transform:scale(1.04)}
+.fb-card-img .fb-card-logo{width:38%;height:auto;margin:auto;position:relative;top:50%;transform:translateY(-50%);background:#fff;border-radius:50%;padding:14px;object-fit:contain}
+.fb-card:hover .fb-card-img .fb-card-logo{transform:translateY(-50%)}
+.fb-card-body{display:flex;flex-direction:column;gap:10px;padding:24px 26px 26px;flex:1}
+.fb-card-body small{color:var(--cyan);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.fb-card-text{color:var(--ink);font-size:17px;line-height:1.6;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;flex:1}
+.fb-card-body em{font-style:normal;color:var(--blue);font-weight:800;font-size:15px}
 .fb-item{display:flex;gap:16px;padding:20px;border-bottom:1px solid var(--line);transition:background .2s}
 .fb-item:last-child{border-bottom:0}
 .fb-item:hover{background:var(--soft)}
@@ -508,10 +512,11 @@ body.modal-open{overflow:hidden}
 .fb-text em{font-style:normal;color:var(--blue);font-weight:800;font-size:14px;margin-top:2px}
 .fb-empty{padding:24px;margin:0;color:var(--muted);font-size:16px}
 .fb-empty a{color:var(--blue);font-weight:800}
-.fb-side-foot{display:block;text-align:center;padding:14px;font-weight:800;font-size:15px;color:var(--blue);border-top:1px solid var(--line)}
-@media(max-width:900px){
+@media(max-width:980px){.fb-cards{grid-template-columns:repeat(2,1fr)}.fb-cards .fb-card:nth-child(3){display:none}}
+@media(max-width:720px){
   .fb-section{padding:70px 0}
-  .fb-grid{grid-template-columns:1fr;gap:36px}
-  .fb-side{max-width:500px;width:100%;margin:auto}
+  .fb-head{margin-bottom:30px}
+  .fb-cards{grid-template-columns:1fr;gap:22px}
+  .fb-cards .fb-card:nth-child(3){display:flex}
+  .fb-item{padding:16px}.fb-thumb{width:54px;height:54px}
 }
-@media(max-width:720px){.fb-item{padding:16px}.fb-thumb{width:54px;height:54px}.fb-side-head{padding:16px}}

@@ -109,20 +109,40 @@ function fechaCorta(iso){
   return isNaN(d)?'':d.toLocaleDateString('es-PE',{day:'numeric',month:'long',year:'numeric'});
 }
 function esc(t){const d=document.createElement('div');d.textContent=t??'';return d.innerHTML}
+async function cargarNovedades(){
+  try{novedades??=await fetch('/novedades.json',{cache:'no-cache'}).then(r=>r.json())}catch{novedades=[]}
+  return novedades.slice().sort((x,y)=>y.fecha.localeCompare(x.fecha));
+}
+// Quita los hashtags y el enlace a formularios para que el resumen se lea limpio
+function resumen(n){
+  return [n.titulo,n.texto].filter(Boolean).join(' ').replace(/#[\p{L}\p{N}_]+/gu,'').replace(/https?:\/\/\S+/g,'').replace(/\s+/g,' ').trim();
+}
+const sinPosts=()=>`<p class="fb-empty">Mira nuestras últimas publicaciones en <a href="${FB_PAGE}" target="_blank" rel="noopener noreferrer">Facebook</a>.</p>`;
+// Lista compacta (ventana flotante)
 async function renderFeed(box){
-  try{
-    novedades??=await fetch('/novedades.json',{cache:'no-cache'}).then(r=>r.json());
-  }catch{novedades=[]}
-  const items=novedades.slice().sort((x,y)=>y.fecha.localeCompare(x.fecha)).slice(0,+box.dataset.limit||4);
-  if(!items.length){box.innerHTML=`<p class="fb-empty">Mira nuestras últimas publicaciones en <a href="${FB_PAGE}" target="_blank" rel="noopener noreferrer">Facebook</a>.</p>`;return}
+  const items=(await cargarNovedades()).slice(0,+box.dataset.limit||4);
+  if(!items.length){box.innerHTML=sinPosts();return}
   box.innerHTML=items.map(n=>`
     <a class="fb-item" href="${esc(n.enlace||FB_PAGE)}" target="_blank" rel="noopener noreferrer">
       ${n.imagen?`<img class="fb-thumb" src="${esc(n.imagen)}" alt="" loading="lazy">`:`<span class="fb-thumb fb-icon" aria-hidden="true">${TIPO_ICONO[n.tipo]||TIPO_ICONO.Publicación}</span>`}
       <span class="fb-text">
-        <small>${esc(n.tipo||'Publicación')} · ${fechaCorta(n.fecha)}</small>
-        ${n.titulo?`<strong>${esc(n.titulo)}</strong>`:''}
-        <span>${esc(n.texto)}</span>
+        <small>${fechaCorta(n.fecha)}</small>
+        <span>${esc(resumen(n))}</span>
         <em>Ver en Facebook →</em>
+      </span>
+    </a>`).join('');
+}
+// Tarjetas grandes con foto (inicio)
+async function renderCards(box){
+  const items=(await cargarNovedades()).slice(0,+box.dataset.limit||3);
+  if(!items.length){box.innerHTML=sinPosts();return}
+  box.innerHTML=items.map(n=>`
+    <a class="fb-card" href="${esc(n.enlace||FB_PAGE)}" target="_blank" rel="noopener noreferrer">
+      <span class="fb-card-img">${n.imagen?`<img src="${esc(n.imagen)}" alt="" loading="lazy">`:`<img class="fb-card-logo" src="/logo-audeco.png?v=4" alt="">`}</span>
+      <span class="fb-card-body">
+        <small>${fechaCorta(n.fecha)}</small>
+        <span class="fb-card-text">${esc(resumen(n))}</span>
+        <em>Leer en Facebook →</em>
       </span>
     </a>`).join('');
 }
@@ -137,7 +157,7 @@ function fbwSet(open){
 fbwBtn.addEventListener('click',()=>fbwSet(!fbw.classList.contains('open')));
 fbw.querySelector('.fbw-min').addEventListener('click',()=>fbwSet(false));
 // Sección «Últimas publicaciones» del inicio
-$$('.fb-feed').forEach(renderFeed);
+$$('.fb-cards').forEach(renderCards);
 
 // Current year
 $('#year').textContent=new Date().getFullYear();
