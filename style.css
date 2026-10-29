@@ -455,3 +455,28 @@ body.modal-open{overflow:hidden}
 /* ---------- Página 404 ---------- */
 .notfound{min-height:62vh;display:flex;align-items:center}
 .notfound .notfound-alt{background:transparent;color:var(--navy);border:1px solid var(--line);margin-left:8px}
+
+/* ---------- Ventana de Facebook ---------- */
+.fbw{position:fixed;right:22px;bottom:22px;z-index:95;display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+.fbw-btn{position:relative;display:flex;align-items:center;gap:10px;border:0;cursor:pointer;background:var(--navy);color:#fff;padding:12px 18px 12px 14px;border-radius:999px;font-weight:800;font-size:15px;box-shadow:0 14px 34px rgba(27,41,66,.32);transition:.2s}
+.fbw-btn:hover{transform:translateY(-2px)}
+.fbw-btn svg{width:24px;height:24px;fill:#fff}
+.fbw-dot{position:absolute;top:7px;left:31px;width:10px;height:10px;border-radius:50%;background:#e0b27e;border:2px solid var(--navy)}
+.fbw.open .fbw-dot{display:none}
+.fbw-panel{display:none;flex-direction:column;width:364px;max-height:calc(100vh - 120px);background:#fff;border-radius:20px;box-shadow:0 24px 60px rgba(25,32,45,.28);overflow:hidden}
+.fbw.open .fbw-panel{display:flex;animation:fbw-in .25s ease-out}
+@keyframes fbw-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.fbw-head{display:flex;justify-content:space-between;align-items:center;padding:10px 12px 10px 18px;background:var(--navy);color:#fff;font-size:16px}
+.fbw-min{border:0;background:rgba(255,255,255,.12);color:#fff;width:32px;height:32px;border-radius:50%;font-size:22px;line-height:1;cursor:pointer}
+.fbw-min:hover{background:rgba(255,255,255,.22)}
+.fbw-body{flex:1;overflow:auto;padding:12px 12px 0;min-height:120px}
+.fbw-foot{display:block;text-align:center;padding:12px;font-weight:800;font-size:15px;color:var(--blue);border-top:1px solid var(--line)}
+@media(max-width:600px){
+  .fbw{right:14px;bottom:14px}
+  .fbw-btn span{display:none}
+  .fbw-btn{padding:14px}
+  .fbw-dot{left:auto;right:6px}
+  .fbw-panel{width:calc(100vw - 28px)}
+  .fbw-body{padding:8px 0 0}
+}
+@media(prefers-reduced-motion:reduce){.fbw.open .fbw-panel{animation:none}}

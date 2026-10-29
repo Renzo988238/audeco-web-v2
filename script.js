@@ -78,5 +78,39 @@ fallbackCopy?.addEventListener('click',async()=>{
   }
 });
 
+// Ventana de Facebook: botón fijo a la derecha; en el inicio (PC) aparece abierta hasta que la minimicen
+const FB_PAGE='https://www.facebook.com/AudecoPe';
+const fbw=document.createElement('div');
+fbw.className='fbw';
+fbw.innerHTML=`
+  <div class="fbw-panel" id="fbw-panel" role="region" aria-label="Últimas publicaciones de AUDECO en Facebook">
+    <div class="fbw-head"><strong>Lo último de AUDECO</strong><button class="fbw-min" type="button" aria-label="Minimizar">–</button></div>
+    <div class="fbw-body"></div>
+    <a class="fbw-foot" href="${FB_PAGE}" target="_blank" rel="noopener noreferrer">Abrir nuestra página en Facebook →</a>
+  </div>
+  <button class="fbw-btn" type="button" aria-expanded="false" aria-controls="fbw-panel">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/></svg>
+    <span>Nuestras novedades</span><i class="fbw-dot"></i>
+  </button>`;
+document.body.appendChild(fbw);
+const fbwBtn=fbw.querySelector('.fbw-btn'), fbwBody=fbw.querySelector('.fbw-body');
+function fbwLoad(){
+  // El plugin de Facebook se carga recién al abrir, para no hacer lenta la página
+  if(fbwBody.firstChild)return;
+  const w=Math.min(340,window.innerWidth-28);
+  fbwBody.innerHTML=`<iframe title="Publicaciones de AUDECO en Facebook" src="https://www.facebook.com/plugins/page.php?href=${encodeURIComponent(FB_PAGE)}&tabs=timeline&width=${w}&height=430&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&locale=es_LA" width="${w}" height="430" style="border:none;overflow:hidden;display:block;margin:auto" scrolling="no" allow="encrypted-media" loading="lazy"></iframe>`;
+}
+function fbwSet(open,remember){
+  fbw.classList.toggle('open',open);
+  fbwBtn.setAttribute('aria-expanded',open);
+  if(open)fbwLoad();
+  if(remember){try{localStorage.setItem('fbw-min',open?'0':'1')}catch{}}
+}
+fbwBtn.addEventListener('click',()=>fbwSet(!fbw.classList.contains('open'),true));
+fbw.querySelector('.fbw-min').addEventListener('click',()=>fbwSet(false,true));
+const isHome=/(^\/$|index\.html$)/.test(location.pathname);
+let fbwMin=false;try{fbwMin=localStorage.getItem('fbw-min')==='1'}catch{}
+if(isHome&&!fbwMin&&window.innerWidth>=900)setTimeout(()=>fbwSet(true,false),1200);
+
 // Current year
 $('#year').textContent=new Date().getFullYear();
