@@ -78,7 +78,7 @@ fallbackCopy?.addEventListener('click',async()=>{
   }
 });
 
-// Ventana de Facebook: botón fijo a la derecha; en el inicio (PC) aparece abierta hasta que la minimicen
+// Publicaciones de Facebook: sección en el inicio y botón fijo a la derecha en todas las páginas
 const FB_PAGE='https://www.facebook.com/AudecoPe';
 const fbw=document.createElement('div');
 fbw.className='fbw';
@@ -94,23 +94,25 @@ fbw.innerHTML=`
   </button>`;
 document.body.appendChild(fbw);
 const fbwBtn=fbw.querySelector('.fbw-btn'), fbwBody=fbw.querySelector('.fbw-body');
-function fbwLoad(){
-  // El plugin de Facebook se carga recién al abrir, para no hacer lenta la página
-  if(fbwBody.firstChild)return;
-  const w=Math.min(340,window.innerWidth-28);
-  fbwBody.innerHTML=`<iframe title="Publicaciones de AUDECO en Facebook" src="https://www.facebook.com/plugins/page.php?href=${encodeURIComponent(FB_PAGE)}&tabs=timeline&width=${w}&height=430&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&locale=es_LA" width="${w}" height="430" style="border:none;overflow:hidden;display:block;margin:auto" scrolling="no" allow="encrypted-media" loading="lazy"></iframe>`;
+// Plugin oficial de la fanpage, al ancho del contenedor (Facebook admite de 180 a 500 px)
+function fbPlugin(box,height){
+  const cs=getComputedStyle(box);
+  const w=Math.max(180,Math.min(500,Math.floor(box.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight))));
+  box.innerHTML=`<iframe title="Publicaciones de AUDECO en Facebook" src="https://www.facebook.com/plugins/page.php?href=${encodeURIComponent(FB_PAGE)}&tabs=timeline&width=${w}&height=${height}&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=false&locale=es_LA" width="${w}" height="${height}" style="border:none;overflow:hidden;display:block;margin:auto" scrolling="no" allow="encrypted-media" loading="lazy"></iframe>`;
 }
-function fbwSet(open,remember){
+function fbwLoad(){
+  // El plugin se carga recién al abrir la ventana, para no hacer lenta la página
+  if(!fbwBody.firstChild)fbPlugin(fbwBody,430);
+}
+function fbwSet(open){
   fbw.classList.toggle('open',open);
   fbwBtn.setAttribute('aria-expanded',open);
   if(open)fbwLoad();
-  if(remember){try{localStorage.setItem('fbw-min',open?'0':'1')}catch{}}
 }
-fbwBtn.addEventListener('click',()=>fbwSet(!fbw.classList.contains('open'),true));
-fbw.querySelector('.fbw-min').addEventListener('click',()=>fbwSet(false,true));
-const isHome=/(^\/$|index\.html$)/.test(location.pathname);
-let fbwMin=false;try{fbwMin=localStorage.getItem('fbw-min')==='1'}catch{}
-if(isHome&&!fbwMin&&window.innerWidth>=900)setTimeout(()=>fbwSet(true,false),1200);
+fbwBtn.addEventListener('click',()=>fbwSet(!fbw.classList.contains('open')));
+fbw.querySelector('.fbw-min').addEventListener('click',()=>fbwSet(false));
+// Sección «Últimas publicaciones» del inicio
+$$('.fb-embed').forEach(box=>fbPlugin(box,+box.dataset.fbHeight||600));
 
 // Current year
 $('#year').textContent=new Date().getFullYear();
