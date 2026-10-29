@@ -1,0 +1,37 @@
+name: Sincronizar publicaciones de Facebook
+
+on:
+  schedule:
+    - cron: "17 */3 * * *"   # cada 3 horas
+  workflow_dispatch:          # botón «Run workflow» para sincronizar al momento
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sincronizar-facebook
+  cancel-in-progress: false
+
+jobs:
+  sincronizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Descargar publicaciones
+        env:
+          FB_PAGE_TOKEN: ${{ secrets.FB_PAGE_TOKEN }}
+        run: python .github/scripts/sync_facebook.py
+      - name: Guardar cambios
+        run: |
+          git add novedades.json novedades
+          if git diff --cached --quiet; then
+            echo "Sin publicaciones nuevas."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Actualizar publicaciones de Facebook"
+          git push
