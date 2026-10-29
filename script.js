@@ -132,19 +132,31 @@ async function renderFeed(box){
       </span>
     </a>`).join('');
 }
+// Tipo de post según su contenido: infografía (solo imagen), artículo (texto largo) o publicación
+function clasificar(n){
+  const t=resumen({texto:n.texto}), largo=(n.titulo+' '+n.texto).length;
+  if(n.imagen&&t.length<40&&!n.titulo)return{tipo:'Infografía',accion:'Ver infografía'};
+  if(largo>500)return{tipo:'Artículo',accion:'Leer artículo completo'};
+  return{tipo:'Publicación',accion:'Ver en Facebook'};
+}
 // Tarjetas grandes con foto (inicio)
 async function renderCards(box){
   const items=(await cargarNovedades()).slice(0,+box.dataset.limit||3);
   if(!items.length){box.innerHTML=sinPosts();return}
-  box.innerHTML=items.map(n=>`
-    <a class="fb-card" href="${esc(n.enlace||FB_PAGE)}" target="_blank" rel="noopener noreferrer">
-      <span class="fb-card-img">${n.imagen?`<img src="${esc(n.imagen)}" alt="" loading="lazy">`:`<img class="fb-card-logo" src="/logo-audeco.png?v=4" alt="">`}</span>
+  box.innerHTML=items.map(n=>{
+    const c=clasificar(n), titulo=resumen({titulo:n.titulo}), texto=resumen({texto:n.texto});
+    return `
+    <a class="fb-card ${c.tipo==='Infografía'?'is-info':''}" href="${esc(n.enlace||FB_PAGE)}" target="_blank" rel="noopener noreferrer">
+      <span class="fb-card-img">${n.imagen
+        ?`<img class="fb-card-blur" src="${esc(n.imagen)}" alt="" aria-hidden="true"><img class="fb-card-photo" src="${esc(n.imagen)}" alt="" loading="lazy">`
+        :`<img class="fb-card-logo" src="/logo-audeco.png?v=5" alt="">`}</span>
       <span class="fb-card-body">
-        <small>${fechaCorta(n.fecha)}</small>
-        <span class="fb-card-text">${esc(resumen(n))}</span>
-        <em>Leer en Facebook →</em>
+        <small><b>${c.tipo}</b> · ${fechaCorta(n.fecha)}</small>
+        ${titulo?`<strong class="fb-card-title">${esc(titulo)}</strong>`:''}
+        ${texto?`<span class="fb-card-text ${titulo?'':'solo'}">${esc(texto)}</span>`:''}
+        <em>${c.accion} →</em>
       </span>
-    </a>`).join('');
+    </a>`}).join('');
 }
 function fbwLoad(){
   if(!fbwBody.firstChild){fbwBody.dataset.limit=4;renderFeed(fbwBody)}
