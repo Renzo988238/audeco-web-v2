@@ -106,7 +106,7 @@ h1,h2,h3,strong{font-family:Manrope,sans-serif}
 .section-heading h2,.center-heading h2{font-size:clamp(38px,4.7vw,58px);line-height:1.06;letter-spacing:-.045em;margin:13px 0 0;color:var(--navy)}
 .section-heading h2 span,.center-heading h2 span{color:var(--blue)}
 .section-heading>p{margin:0;color:var(--muted);font-size:19px;line-height:1.8}
-.kicker{font-size:12px;font-weight:900;letter-spacing:.19em;color:var(--blue)}
+.kicker{display:inline-block;font-size:clamp(15px,1.4vw,18px);font-weight:900;letter-spacing:.16em;color:var(--blue)}
 
 .story-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:20px}
 .story-card,.mini-card{border:1px solid var(--line);border-radius:var(--radius);background:#fff}
@@ -331,7 +331,7 @@ body.modal-open{overflow:hidden}
 /* ---------- Apoyo desde el extranjero ---------- */
 .abroad-band{background:linear-gradient(135deg,#14213a 0%,#203457 62%,#765043 100%);color:#fff;padding:72px 0}
 .abroad-inner{display:grid;grid-template-columns:1.25fr .75fr;gap:60px;align-items:center}
-.abroad-band .kicker{color:#e0b27e}
+.abroad-band .kicker,.section-heading.light .kicker{color:#e0b27e}
 .abroad-band h2{font-size:clamp(28px,3.4vw,40px);line-height:1.15;letter-spacing:-.035em;margin:12px 0 22px;color:#fff}
 .abroad-band p{margin:0 0 26px;color:#e6ded4;font-size:18px;line-height:1.75;max-width:640px}
 .abroad-actions{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
