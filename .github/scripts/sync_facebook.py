@@ -4,6 +4,7 @@ Usa la API de Meta (Graph API) con un token de página guardado en el secreto
 FB_PAGE_TOKEN. Las imágenes se guardan en novedades/ porque los enlaces de
 Facebook a las fotos caducan a los pocos días.
 """
+import datetime
 import json
 import os
 import pathlib
@@ -55,12 +56,29 @@ def token_de_pagina(token):
     return elegida["access_token"], elegida["id"]
 
 
+def dias_de_acceso(token):
+    """Días que quedan antes de que Meta pida renovar el permiso de datos (cada 90 días)."""
+    try:
+        info = api("debug_token", token, input_token=token).get("data", {})
+    except Exception as e:
+        print("No se pudo revisar la vigencia del token:", e)
+        return None
+    vence = info.get("data_access_expires_at") or 0
+    if not vence:
+        return None
+    fecha = datetime.datetime.fromtimestamp(vence, datetime.timezone.utc)
+    dias = (fecha - datetime.datetime.now(datetime.timezone.utc)).days
+    print(f"El acceso a los datos vence el {fecha:%d/%m/%Y} (en {dias} días)")
+    return dias
+
+
 def main():
     token = os.environ.get("FB_PAGE_TOKEN", "").strip()
     if not token:
         print("Falta el secreto FB_PAGE_TOKEN: no se sincroniza.")
         return 0
 
+    dias = dias_de_acceso(token)
     try:
         token, pagina = token_de_pagina(token)
         campos = "message,created_time,permalink_url,full_picture"
@@ -117,6 +135,12 @@ def main():
 
     ARCHIVO.write_text(json.dumps(novedades, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"{len(novedades)} publicaciones guardadas.")
+    if dias is not None and dias < 15:
+        # El proceso falla a propósito para que GitHub envíe un correo de aviso
+        print(f"::error::Faltan {dias} días para que caduque el acceso a Facebook. "
+              "Renovar en el Graph API Explorer con «Generate Access Token» "
+              "(ver .github/GUIA-FACEBOOK.md).")
+        return 1
     return 0
 
 

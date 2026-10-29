@@ -12,10 +12,25 @@ Para sincronizar al momento: **Actions → Sincronizar publicaciones de Facebook
 
 La app de Meta que da acceso a la fanpage se llama **AUDECO Web** y está en [developers.facebook.com/apps](https://developers.facebook.com/apps/).
 
+## Renovación cada 90 días
+
+El token de la página no caduca, pero Meta exige que la cuenta que lo generó confirme el permiso de acceso a los datos cada 90 días. Su vencimiento figura como **Data Access Expires** en el [depurador de tokens](https://developers.facebook.com/tools/debug/accesstoken/).
+
+Cuando falten menos de 15 días, la sincronización sigue actualizando la web, pero termina con error a propósito para que GitHub envíe un correo de aviso.
+
+Para renovarlo (1 minuto), con la misma cuenta de Facebook:
+
+1. Abrir el [Graph API Explorer](https://developers.facebook.com/tools/explorer/).
+2. En **Meta App**, elegir **AUDECO Web**. Comprobar que estén los permisos `pages_show_list` y `pages_read_engagement`.
+3. Pulsar **Generate Access Token** y aceptar.
+
+No hace falta cambiar nada en GitHub. Para comprobarlo, lanzar **Run workflow**: el registro muestra la nueva fecha de vencimiento.
+
 ## Si deja de actualizarse
 
 GitHub envía un correo cuando la sincronización falla. Las causas más comunes:
 
+- No se renovó el permiso de los 90 días (sección anterior).
 - El token caducó.
 - La cuenta que generó el token dejó de administrar la fanpage, cambió su contraseña o fue eliminada.
 
