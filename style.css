@@ -446,3 +446,7 @@ body.modal-open{overflow:hidden}
   .reveal{opacity:1;transform:none;transition:none}
   .scroll-cue span:after{animation:none}
 }
+
+/* ---------- Página 404 ---------- */
+.notfound{min-height:62vh;display:flex;align-items:center}
+.notfound .notfound-alt{background:transparent;color:var(--navy);border:1px solid var(--line);margin-left:8px}
