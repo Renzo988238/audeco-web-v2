@@ -83,6 +83,19 @@ def token_de_pagina(token, info):
     return elegida["access_token"], elegida["id"]
 
 
+def avisar_token_rechazado(cuerpo):
+    """Muestra en el resumen de GitHub qué hacer cuando Meta deja de aceptar el token."""
+    try:
+        error = json.loads(cuerpo).get("error", {})
+    except (ValueError, AttributeError):
+        return
+    # 190: token inválido o caducado; 10, 200: la app perdió el permiso para actuar por la cuenta
+    if error.get("type") == "OAuthException" and error.get("code") in (10, 190, 200):
+        print("::error title=Facebook rechazó el token::Meta ya no acepta el token de FB_PAGE_TOKEN. "
+              "Generar uno nuevo y reemplazarlo en GitHub (ver .github/GUIA-FACEBOOK.md, "
+              "«Si deja de actualizarse»). La web sigue mostrando las últimas publicaciones.")
+
+
 def main():
     token = os.environ.get("FB_PAGE_TOKEN", "").strip()
     if not token:
@@ -103,7 +116,9 @@ def main():
                 break
     except urllib.error.HTTPError as e:
         # El cuerpo del error de Meta no incluye el token
-        print("Error de la API de Meta:", e.code, e.read().decode("utf-8", "replace"))
+        cuerpo = e.read().decode("utf-8", "replace")
+        print("Error de la API de Meta:", e.code, cuerpo)
+        avisar_token_rechazado(cuerpo)
         return 1
 
     if not posts:

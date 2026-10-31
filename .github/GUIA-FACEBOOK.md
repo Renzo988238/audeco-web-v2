@@ -33,8 +33,11 @@ GitHub envía un correo cuando la sincronización falla. Las causas más comunes
 - No se renovó el permiso de los 90 días (sección anterior).
 - El token caducó.
 - La cuenta que generó el token dejó de administrar la fanpage, cambió su contraseña o fue eliminada.
+- El registro muestra `Cannot call API for app … on behalf of user …`: Meta ya no deja que la app AUDECO Web actúe en nombre de la cuenta. Ocurre cuando la cuenta quitó la app en *Configuración → Integraciones comerciales*, perdió su rol en la app, pasó un control de seguridad de Facebook, o Meta restringió la app (aparece una alerta en [developers.facebook.com/apps](https://developers.facebook.com/apps/)).
 
 En cualquiera de los casos, la solución es generar un token nuevo (sección siguiente) y reemplazarlo en GitHub. La web no se cae: sigue mostrando los últimos posts que descargó.
+
+Mientras no se cambie el token, GitHub envía un correo por cada intento fallido. Para pausarlos: **Actions → Sincronizar publicaciones de Facebook → ⋯ → Disable workflow**. Después de reemplazar el token, volver a activarlo con **Enable workflow**.
 
 ## Generar un token nuevo (unos 5 minutos)
 
