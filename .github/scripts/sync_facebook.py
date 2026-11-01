@@ -60,6 +60,17 @@ def dias_de_acceso(info):
     return dias
 
 
+def dias_de_token(info):
+    """Días de vida del token: el de página no caduca; el de usuario dura 1 hora o 60 días."""
+    vence = info.get("expires_at") or 0
+    if not vence:
+        return None
+    fecha = datetime.datetime.fromtimestamp(vence, datetime.timezone.utc)
+    dias = (fecha - datetime.datetime.now(datetime.timezone.utc)).days
+    print(f"El token caduca el {fecha:%d/%m/%Y} (en {dias} días)")
+    return dias
+
+
 def token_de_pagina(token, info):
     """Acepta un token de página o de usuario; con uno de usuario busca el de la página."""
     yo = api("me", token, fields="id,name")
@@ -104,6 +115,7 @@ def main():
 
     info = info_token(token)
     dias = dias_de_acceso(info)
+    dias_token = dias_de_token(info)
     try:
         token, pagina = token_de_pagina(token, info)
         campos = "message,created_time,permalink_url,full_picture"
@@ -167,6 +179,11 @@ def main():
         print(f"::error::Faltan {dias} días para que caduque el acceso a Facebook. "
               "Renovar en el Graph API Explorer con «Generate Access Token» "
               "(ver .github/GUIA-FACEBOOK.md).")
+        return 1
+    if dias_token is not None and dias_token < 15:
+        print(f"::error title=El token de Facebook caduca pronto::Faltan {dias_token} días. "
+              "FB_PAGE_TOKEN tiene un token de usuario: reemplazarlo por el de la página, "
+              "que no caduca (ver .github/GUIA-FACEBOOK.md, «Generar un token nuevo»).")
         return 1
     return 0
 
