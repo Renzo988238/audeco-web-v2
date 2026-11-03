@@ -1,6 +1,6 @@
-# Idea en standby: línea de tiempo «Nuestra historia»
+# Línea de tiempo «Nuestra historia»
 
-Estado: **textos listos, esperando el «go»** (03/11/2026) para pasarla a `nosotros.html`.
+Estado: **ejecutada en `nosotros.html`** (03/11/2026), en reemplazo de la sección «Trayectoria». Los hitos 3 y 4 se publicaron solo con el año (2026) hasta confirmar el mes.
 
 Referencia de diseño: sección «Our story» de getbable.com/about, adaptada a la paleta de AUDECO (azul marino y terracota, fondo claro).
 
@@ -47,7 +47,7 @@ La carpeta `.github/` no se publica en GitHub Pages, por lo que nada de esto apa
 - [ ] Mes de la primera denuncia ante INDECOPI (hito 3).
 - [ ] Inicio real de las publicaciones en redes (hito 4; el dato más antiguo sincronizado es del 07/07/2026).
 - [ ] ¿Hay algún antecedente previo a octubre de 2025 que deba contarse?
-- [ ] Destino de la foto de graduación: quitarla, pasarla a la tarjeta del presidente o dejarla debajo de la línea de tiempo.
+- [x] Foto de graduación: retirada de `nosotros.html`; el archivo `renzo-graduacion.jpg` sigue en el repositorio.
 - [ ] Confirmar o descartar el hito 6 («Hoy»).
 
 ## Para retomarla

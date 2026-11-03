@@ -75,58 +75,132 @@
 
 
     /* =========================================================
-       SECCIÓN DE TRAYECTORIA / GRADUACIÓN
+       LÍNEA DE TIEMPO · NUESTRA HISTORIA
        ========================================================= */
 
-    .graduation-section {
+    .history-section {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 4rem;
-      align-items: center;
-      margin: 5rem 0 4rem;
+      grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+      gap: 80px;
+      align-items: start;
+      margin: 5.5rem 0 5rem;
     }
 
-    .graduation-content {
+    .history-intro {
+      position: sticky;
+      top: 120px;
+    }
+
+    .history-intro h3 {
+      font-size: clamp(34px, 4vw, 50px);
+      line-height: 1.08;
+      letter-spacing: -.045em;
+      margin: 13px 0 20px;
+      color: var(--navy);
+    }
+
+    .history-intro h3 span {
+      color: var(--blue);
+    }
+
+    .history-intro p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.75;
+      max-width: 440px;
+    }
+
+    .timeline {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+
+    /* Riel gris y relleno terracota que avanza con el scroll */
+    .timeline::before,
+    .timeline::after {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 12px;
+      width: 2px;
+      border-radius: 2px;
+    }
+
+    .timeline::before {
+      bottom: 12px;
+      background: var(--line);
+    }
+
+    .timeline::after {
+      height: var(--fill, 0px);
+      background: linear-gradient(180deg, var(--gold), var(--blue));
+      transition: height .25s linear;
+    }
+
+    .tl-item {
+      position: relative;
+      padding: 0 0 52px 48px;
+    }
+
+    .tl-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .tl-item::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 6px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid var(--line);
+      box-sizing: border-box;
+      transition: background .3s ease, border-color .3s ease, box-shadow .3s ease;
+    }
+
+    .tl-item.is-active::before {
+      background: var(--blue);
+      border-color: var(--blue);
+      box-shadow: 0 0 0 5px rgba(139, 79, 63, .14);
+    }
+
+    .tl-item time {
+      display: block;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      line-height: 1.4;
+    }
+
+    .tl-item h4 {
+      margin: 6px 0 10px;
+      font-family: "Manrope", sans-serif;
+      font-size: 25px;
+      line-height: 1.25;
+      letter-spacing: -.02em;
+      color: var(--navy);
+    }
+
+    .tl-item p {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.75;
+      color: var(--muted);
       max-width: 620px;
     }
 
-    .graduation-content h3 {
-      font-family: "Manrope", sans-serif;
-      font-size: clamp(1.8rem, 3vw, 2.7rem);
-      line-height: 1.12;
-      margin: 0.7rem 0 1.2rem;
-    }
-
-    .graduation-content p {
-      line-height: 1.75;
-      margin-bottom: 1rem;
-    }
-
-    .graduation-image-wrapper {
-      width: 100%;
-    }
-
-    .graduation-image {
-      width: 100%;
-      max-height: 680px;
-      object-fit: cover;
-      object-position: center;
-      display: block;
-      border-radius: 18px;
-    }
-
-    .photo-caption {
-      margin: 0.8rem 0 0;
-      font-size: 0.82rem;
-      line-height: 1.5;
-      opacity: 0.68;
-    }
-
-    .photo-note {
-      margin-top: 0.65rem;
-      font-size: 0.76rem;
-      line-height: 1.5;
-      opacity: 0.58;
+    @media (prefers-reduced-motion: reduce) {
+      .timeline::after,
+      .tl-item::before {
+        transition: none;
+      }
     }
 
 
@@ -185,18 +259,26 @@
 
     @media (max-width: 800px) {
 
-      .graduation-section {
+      .history-section {
         grid-template-columns: 1fr;
-        gap: 2rem;
-        margin: 3.5rem 0 3rem;
+        gap: 40px;
+        margin: 4rem 0 3.5rem;
       }
 
-      .graduation-content {
-        max-width: none;
+      .history-intro {
+        position: static;
       }
 
-      .graduation-image {
-        max-height: 600px;
+      .tl-item {
+        padding: 0 0 40px 40px;
+      }
+
+      .tl-item h4 {
+        font-size: 22px;
+      }
+
+      .tl-item p {
+        font-size: 17px;
       }
 
       .president-photo-wrapper {
@@ -411,62 +493,89 @@
 
 
         <!-- =================================================
-             NUEVA SECCIÓN: TRAYECTORIA
+             NUESTRA HISTORIA · LÍNEA DE TIEMPO
              ================================================= -->
 
-        <section class="graduation-section reveal">
+        <section class="history-section reveal" aria-labelledby="historia-title">
 
-          <div class="graduation-content">
+          <div class="history-intro">
 
-            <span class="kicker">TRAYECTORIA</span>
+            <span class="kicker">NUESTRA HISTORIA</span>
 
-            <h3>
-              Formación y compromiso con el servicio a la ciudadanía.
+            <h3 id="historia-title">
+              De una convicción a una
+              <span>asociación reconocida.</span>
             </h3>
 
             <p>
-              La labor de AUDECO se desarrolla desde una perspectiva de servicio
-              y compromiso con la defensa de los derechos de las personas
-              consumidoras.
-            </p>
-
-            <p>
-              Esta trayectoria también está vinculada con la formación académica
-              y profesional de quienes participan en la organización. Como
-              Presidente de AUDECO, Renzo Gabriel Núñez Yanyachy participa en la
-              conducción institucional y en la representación de la asociación
-              ante las autoridades correspondientes.
-            </p>
-
-            <p>
-              La fotografía corresponde a una ceremonia de graduación y forma
-              parte de la trayectoria personal y académica del Presidente de
-              AUDECO.
+              El hilo no ha cambiado: información clara, defensa gratuita y
+              trabajo voluntario.
             </p>
 
           </div>
 
 
-          <div class="graduation-image-wrapper">
+          <ol class="timeline">
 
-            <img
-              src="renzo-graduacion.jpg"
-              alt="Renzo Gabriel Núñez Yanyachy durante su ceremonia de graduación"
-              class="graduation-image"
-              loading="lazy"
-            >
+            <li class="tl-item">
+              <time datetime="2025-10-03">03 oct 2025</time>
+              <h4>Nace AUDECO</h4>
+              <p>
+                Se constituye en Arequipa con el fin de informar, representar y
+                defender los derechos de las personas consumidoras del Perú.
+              </p>
+            </li>
 
-            <p class="photo-caption">
-              Ceremonia de graduación — Universidad Católica San Pablo
-            </p>
+            <li class="tl-item">
+              <time datetime="2026-02-05">05 feb 2026</time>
+              <h4>Reconocimiento oficial</h4>
+              <p>
+                INDECOPI inscribe a AUDECO en el Registro Oficial de
+                Asociaciones de Consumidores con el N.º 119-AC/DPC.
+              </p>
+            </li>
 
-            <p class="photo-note">
-              Las fotografías publicadas en esta sección corresponden a
-              registros fotográficos reales relacionados con la trayectoria
-              de integrantes de AUDECO.
-            </p>
+            <li class="tl-item">
+              <time datetime="2026">2026</time>
+              <h4>Defensa ante INDECOPI</h4>
+              <p>
+                Presentamos denuncias administrativas ante INDECOPI, tanto en
+                defensa de intereses difusos de los consumidores como en
+                representación de usuarios afectados, con énfasis en
+                infracciones al Libro de Reclamaciones virtual.
+              </p>
+            </li>
 
-          </div>
+            <li class="tl-item">
+              <time datetime="2026">2026</time>
+              <h4>Alertas al consumidor</h4>
+              <p>
+                Difundimos en redes sociales alertas, sanciones y
+                recomendaciones para que más personas reconozcan cuándo se
+                vulneran sus derechos.
+              </p>
+            </li>
+
+            <li class="tl-item">
+              <time datetime="2026-10">Oct 2026</time>
+              <h4>Primer aniversario</h4>
+              <p>
+                Al cumplir un año, AUDECO se incorpora al ElevenLabs Impact
+                Program para llevar sus guías legales a formato de audio y
+                realiza su primer webinar sobre derechos del consumidor.
+              </p>
+            </li>
+
+            <li class="tl-item">
+              <time>Hoy</time>
+              <h4>La misma convicción</h4>
+              <p>
+                Que cada persona consumidora conozca sus derechos y sepa cómo
+                exigirlos, en cualquier lugar del Perú.
+              </p>
+            </li>
+
+          </ol>
 
         </section>
 
@@ -784,6 +893,32 @@
 
   <!-- JavaScript principal -->
   <script src="script.js?v=6"></script>
+
+  <!-- Línea de tiempo: relleno del riel y puntos activos según el scroll -->
+  <script>
+    (function () {
+      const timeline = document.querySelector('.timeline');
+      if (!timeline) return;
+      const items = [...timeline.querySelectorAll('.tl-item')];
+
+      function update() {
+        const box = timeline.getBoundingClientRect();
+        const marker = window.innerHeight * 0.6;
+        const max = box.height - 24;
+        const filled = Math.max(0, Math.min(marker - box.top - 12, max));
+        timeline.style.setProperty('--fill', filled + 'px');
+
+        items.forEach(item => {
+          const dot = item.getBoundingClientRect().top + 14;
+          item.classList.toggle('is-active', dot <= marker);
+        });
+      }
+
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      update();
+    })();
+  </script>
 
 </body>
 </html>
