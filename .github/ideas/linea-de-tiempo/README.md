@@ -1,6 +1,6 @@
 # Idea en standby: línea de tiempo «Nuestra historia»
 
-Estado: **en pausa** (03/11/2026). Pendiente de datos antes de pasarla a `nosotros.html`.
+Estado: **textos listos, esperando el «go»** (03/11/2026) para pasarla a `nosotros.html`.
 
 Referencia de diseño: sección «Our story» de getbable.com/about, adaptada a la paleta de AUDECO (azul marino y terracota, fondo claro).
 
@@ -26,9 +26,9 @@ La carpeta `.github/` no se publica en GitHub Pages, por lo que nada de esto apa
 - En celular: una sola columna, sin columna fija.
 - Las etiquetas «POR CONFIRMAR» existen solo en la maqueta.
 
-## Textos (versión 2, con las correcciones del 03/11/2026)
+## Textos (versión 3, con las correcciones del 03/11/2026)
 
-1. **03 OCT 2025 · Nace AUDECO.** Estudiantes y egresados de Derecho constituyen la asociación en Arequipa con el fin de informar, representar y defender los derechos de las personas consumidoras del Perú.
+1. **03 OCT 2025 · Nace AUDECO.** Se constituye en Arequipa con el fin de informar, representar y defender los derechos de las personas consumidoras del Perú.
 2. **05 FEB 2026 · Reconocimiento oficial.** INDECOPI inscribe a AUDECO en el Registro Oficial de Asociaciones de Consumidores con el N.º 119-AC/DPC.
 3. **2026 · Defensa ante INDECOPI.** Presentamos denuncias administrativas ante INDECOPI, tanto en defensa de intereses difusos de los consumidores como en representación de usuarios afectados, con énfasis en infracciones al Libro de Reclamaciones virtual.
 4. **JUL 2026 · Alertas al consumidor.** Difundimos en redes sociales alertas, sanciones y recomendaciones para que más personas reconozcan cuándo se vulneran sus derechos.
@@ -37,7 +37,7 @@ La carpeta `.github/` no se publica en GitHub Pages, por lo que nada de esto apa
 
 ### Correcciones ya aplicadas
 
-- Hito 1: se quitaron la partida registral y el RUC; se agregó el fin de la constitución.
+- Hito 1: se quitaron la partida registral, el RUC y la mención a «estudiantes y egresados de Derecho»; se agregó el fin de la constitución.
 - Hito 3: ya no dice «primeras denuncias»; incluye intereses difusos y representación de usuarios.
 - Hito 6: se quitó «siete personas ad honorem, correo institucional y servicio gratuito».
 
