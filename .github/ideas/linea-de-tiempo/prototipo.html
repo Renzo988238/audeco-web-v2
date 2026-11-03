@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prototipo · Línea de tiempo</title>
+
+  <!-- Maqueta en standby: no forma parte del sitio publicado (.github no se publica). -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../style.css?v=6">
+
+  <style>
+    /* =========================================================
+       LÍNEA DE TIEMPO · NUESTRA HISTORIA
+       ========================================================= */
+
+    .history-grid {
+      display: grid;
+      grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+      gap: 80px;
+      align-items: start;
+    }
+
+    .history-intro {
+      position: sticky;
+      top: 120px;
+    }
+
+    .history-intro h2 {
+      font-size: clamp(36px, 4.2vw, 52px);
+      line-height: 1.08;
+      letter-spacing: -.045em;
+      margin: 13px 0 20px;
+      color: var(--navy);
+    }
+
+    .history-intro h2 span { color: var(--blue); }
+
+    .history-intro p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.75;
+      max-width: 440px;
+    }
+
+    .timeline {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+
+    /* Riel gris y relleno terracota que avanza con el scroll */
+    .timeline::before,
+    .timeline::after {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 12px;
+      width: 2px;
+      border-radius: 2px;
+    }
+
+    .timeline::before {
+      bottom: 12px;
+      background: var(--line);
+    }
+
+    .timeline::after {
+      height: var(--fill, 0px);
+      background: linear-gradient(180deg, var(--gold), var(--blue));
+      transition: height .25s linear;
+    }
+
+    .tl-item {
+      position: relative;
+      padding: 0 0 52px 48px;
+    }
+
+    .tl-item:last-child { padding-bottom: 0; }
+
+    .tl-item::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 6px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid var(--line);
+      box-sizing: border-box;
+      transition: background .3s ease, border-color .3s ease, box-shadow .3s ease;
+    }
+
+    .tl-item.is-active::before {
+      background: var(--blue);
+      border-color: var(--blue);
+      box-shadow: 0 0 0 5px rgba(139, 79, 63, .14);
+    }
+
+    .tl-item time {
+      display: block;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      line-height: 1.4;
+    }
+
+    .tl-item h3 {
+      margin: 6px 0 10px;
+      font-size: 25px;
+      line-height: 1.25;
+      letter-spacing: -.02em;
+      color: var(--navy);
+    }
+
+    .tl-item p {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.75;
+      color: var(--muted);
+      max-width: 620px;
+    }
+
+    /* Solo en la maqueta: marca los datos que faltan confirmar */
+    .pending {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 1px 8px;
+      border-radius: 999px;
+      background: #fbefe2;
+      color: #9a5a2a;
+      font-size: 11px;
+      letter-spacing: .08em;
+      vertical-align: 2px;
+    }
+
+    @media (max-width: 800px) {
+      .history-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .history-intro { position: static; }
+
+      .tl-item { padding: 0 0 40px 40px; }
+
+      .tl-item h3 { font-size: 22px; }
+
+      .tl-item p { font-size: 17px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="site-header" id="top">
+    <div class="container nav-wrap">
+      <a class="brand" href="#" aria-label="AUDECO, inicio">
+        <img class="brand-logo" src="../../../logo-audeco.png?v=5" alt="" width="48" height="48">
+        <div class="brand-text">
+          <strong>AUDECO</strong>
+          <span>Asociación por la Unidad y Derechos del Consumidor</span>
+        </div>
+      </a>
+      <nav class="main-nav" aria-label="Navegación principal">
+        <a href="#" class="active">Nosotros</a>
+        <a href="#">Nuestro trabajo</a>
+        <a href="#">Derechos</a>
+        <a href="#">Transparencia</a>
+        <a href="#" class="nav-cta">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="section" aria-labelledby="historia-title">
+      <div class="container history-grid">
+
+        <div class="history-intro">
+          <span class="kicker">NUESTRA HISTORIA</span>
+          <h2 id="historia-title">
+            De una convicción a una
+            <span>asociación reconocida.</span>
+          </h2>
+          <p>
+            El hilo no ha cambiado: información clara, defensa gratuita y
+            trabajo voluntario.
+          </p>
+        </div>
+
+        <ol class="timeline">
+          <li class="tl-item">
+            <time datetime="2025-10-03">03 oct 2025</time>
+            <h3>Nace AUDECO</h3>
+            <p>
+              Se constituye en Arequipa con el fin de informar, representar y
+              defender los derechos de las personas consumidoras del Perú.
+            </p>
+          </li>
+
+          <li class="tl-item">
+            <time datetime="2026-02-05">05 feb 2026</time>
+            <h3>Reconocimiento oficial</h3>
+            <p>
+              INDECOPI inscribe a AUDECO en el Registro Oficial de
+              Asociaciones de Consumidores con el N.º 119-AC/DPC.
+            </p>
+          </li>
+
+          <li class="tl-item">
+            <time datetime="2026">2026 <span class="pending">POR CONFIRMAR</span></time>
+            <h3>Defensa ante INDECOPI</h3>
+            <p>
+              Presentamos denuncias administrativas ante INDECOPI, tanto en
+              defensa de intereses difusos de los consumidores como en
+              representación de usuarios afectados, con énfasis en
+              infracciones al Libro de Reclamaciones virtual.
+            </p>
+          </li>
+
+          <li class="tl-item">
+            <time datetime="2026-07">Jul 2026 <span class="pending">POR CONFIRMAR</span></time>
+            <h3>Alertas al consumidor</h3>
+            <p>
+              Difundimos en redes sociales alertas, sanciones y
+              recomendaciones para que más personas reconozcan cuándo se
+              vulneran sus derechos.
+            </p>
+          </li>
+
+          <li class="tl-item">
+            <time datetime="2026-10">Oct 2026</time>
+            <h3>Primer aniversario</h3>
+            <p>
+              Al cumplir un año, AUDECO se incorpora al ElevenLabs Impact
+              Program para llevar sus guías legales a formato de audio y
+              realiza su primer webinar sobre derechos del consumidor.
+            </p>
+          </li>
+
+          <li class="tl-item">
+            <time>Hoy</time>
+            <h3>La misma convicción</h3>
+            <p>
+              Que cada persona consumidora conozca sus derechos y sepa cómo
+              exigirlos, en cualquier lugar del Perú.
+            </p>
+          </li>
+        </ol>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // Relleno de la línea y puntos activos según el avance del scroll.
+    (function () {
+      const timeline = document.querySelector('.timeline');
+      const items = [...timeline.querySelectorAll('.tl-item')];
+
+      function update() {
+        const box = timeline.getBoundingClientRect();
+        const marker = window.innerHeight * 0.6;
+        const max = box.height - 24;
+        const filled = Math.max(0, Math.min(marker - box.top - 12, max));
+        timeline.style.setProperty('--fill', filled + 'px');
+
+        items.forEach(item => {
+          const dot = item.getBoundingClientRect().top + 14;
+          item.classList.toggle('is-active', dot <= marker);
+        });
+      }
+
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      update();
+    })();
+  </script>
+
+</body>
+</html>
