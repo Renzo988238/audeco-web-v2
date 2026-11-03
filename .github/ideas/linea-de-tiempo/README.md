@@ -16,7 +16,7 @@ La carpeta `.github/` no se publica en GitHub Pages, por lo que nada de esto apa
 
 ## Ubicación prevista
 
-`nosotros.html`, entre «Misión y visión» y «Nuestro equipo», en reemplazo de la sección «Trayectoria» (foto de graduación). Falta decidir el destino de esa foto.
+`nosotros.html`, entre «Misión y visión» y «Nuestro equipo», en reemplazo de la sección «Trayectoria» (foto de graduación, ya eliminada).
 
 ## Diseño
 
