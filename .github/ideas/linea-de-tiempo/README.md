@@ -47,7 +47,7 @@ La carpeta `.github/` no se publica en GitHub Pages, por lo que nada de esto apa
 - [ ] Mes de la primera denuncia ante INDECOPI (hito 3).
 - [ ] Inicio real de las publicaciones en redes (hito 4; el dato más antiguo sincronizado es del 07/07/2026).
 - [ ] ¿Hay algún antecedente previo a octubre de 2025 que deba contarse?
-- [x] Foto de graduación: retirada de `nosotros.html`; el archivo `renzo-graduacion.jpg` sigue en el repositorio.
+- [x] Foto de graduación: retirada de `nosotros.html` y eliminada del repositorio.
 - [ ] Confirmar o descartar el hito 6 («Hoy»).
 
 ## Para retomarla
