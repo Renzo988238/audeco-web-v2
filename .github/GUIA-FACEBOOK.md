@@ -6,7 +6,7 @@ La sección «Últimas publicaciones» del inicio y la ventana «Nuestras noveda
 
 1. Cada 3 horas, GitHub ejecuta el proceso [Sincronizar publicaciones de Facebook](../../actions/workflows/sincronizar-facebook.yml).
 2. El proceso lee los posts de la fanpage con la API de Meta, usando el token guardado en el secreto `FB_PAGE_TOKEN`.
-3. Guarda las 6 publicaciones más recientes en `novedades.json` y sus fotos en la carpeta `novedades/`. La web muestra las 3 últimas en el inicio.
+3. Guarda las 12 publicaciones más recientes en `novedades.json` y sus fotos en la carpeta `novedades/`. El inicio las muestra en un carrusel: 3 a la vista y flechas para ver el resto.
 
 Para sincronizar al momento: **Actions → Sincronizar publicaciones de Facebook → Run workflow**.
 

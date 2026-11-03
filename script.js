@@ -168,8 +168,39 @@ function fbwSet(open){
 }
 fbwBtn.addEventListener('click',()=>fbwSet(!fbw.classList.contains('open')));
 fbw.querySelector('.fbw-min').addEventListener('click',()=>fbwSet(false));
-// Sección «Últimas publicaciones» del inicio
-$$('.fb-cards').forEach(renderCards);
+// Sección «Últimas publicaciones» del inicio: carrusel con flechas
+$$('.fb-carousel').forEach(async wrap=>{
+  const track=wrap.querySelector('.fb-cards'), prev=wrap.querySelector('.fb-arrow.prev'), next=wrap.querySelector('.fb-arrow.next');
+  await renderCards(track);
+  const quieto=matchMedia('(prefers-reduced-motion: reduce)');
+  // Avanza o retrocede tantas tarjetas como caben a la vista
+  const paso=()=>{
+    const card=track.querySelector('.fb-card');
+    if(!card)return track.clientWidth;
+    const st=getComputedStyle(track), gap=parseFloat(st.columnGap)||0;
+    const visible=track.clientWidth-parseFloat(st.paddingLeft)-parseFloat(st.paddingRight);
+    const ancho=card.offsetWidth+gap;
+    return Math.max(1,Math.round((visible+gap)/ancho))*ancho;
+  };
+  const mover=dir=>track.scrollBy({left:dir*paso(),behavior:quieto.matches?'auto':'smooth'});
+  prev.addEventListener('click',()=>mover(-1));
+  next.addEventListener('click',()=>mover(1));
+  let pendiente=false;
+  const actualizar=()=>{
+    pendiente=false;
+    const max=track.scrollWidth-track.clientWidth;
+    wrap.classList.toggle('is-scrollable',max>2);
+    prev.disabled=track.scrollLeft<=2;
+    next.disabled=track.scrollLeft>=max-2;
+    // Las flechas quedan a media altura de la foto, sin tapar el texto de la tarjeta
+    const img=track.querySelector('.fb-card:not(.is-info) .fb-card-img');
+    if(img)wrap.style.setProperty('--arrow-top',`${img.offsetHeight/2}px`);
+  };
+  const pedir=()=>{if(!pendiente){pendiente=true;requestAnimationFrame(actualizar)}};
+  track.addEventListener('scroll',pedir,{passive:true});
+  window.addEventListener('resize',pedir);
+  actualizar();
+});
 
 // Current year
 $('#year').textContent=new Date().getFullYear();
